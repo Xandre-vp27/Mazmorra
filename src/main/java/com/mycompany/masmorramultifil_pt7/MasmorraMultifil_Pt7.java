@@ -3,8 +3,7 @@
  */
 package com.mycompany.masmorramultifil_pt7;
 
-import Model.Guerrer;
-import Model.Mag;
+import Model.*;
 
 /**
  *
@@ -14,16 +13,22 @@ public class MasmorraMultifil_Pt7 {
 
     public static void main(String[] args) {
 
-        System.out.println("--- Iniciant Masmoora Multifil ---\n");
+        System.out.println("=== 🏁 BATTLE STARTS 🏁 ===\n");
 
-        Guerrer p1 = new Guerrer("Guerrer", 100);
-        Mag p2 = new Mag("Mag", 100);
+        Ogre ogre = new Ogre("Ogre", 500);
+
+        Warrior warrior = new Warrior("Corvan", 100, 140, 30, 1500, 1000, 500, 300, ogre);
+        Wizard wizard = new Wizard("Greiflum", 100, 60, 10, 1000, 600, 200, 100, ogre);
+        Rogue rogue = new Rogue("Darrel", 100, 30, 5, 500, 200, 50, 10, ogre);
 
         // Creem el Thread i indiquem el personatge
-        Thread filP1 = new Thread(p1);
-        Thread filP2 = new Thread(p2);
-        filP1.start();
-        filP2.start();
+        Thread filC1 = new Thread(warrior);
+        Thread filC2 = new Thread(wizard);
+        Thread filC3 = new Thread(rogue);
+        filC1.start();
+        filC2.start();
+        filC3.start();
 
     }
+
 }
