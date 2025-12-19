@@ -21,12 +21,12 @@ public class Wizard extends Character implements Runnable {
         System.out.println("🧙🎭 Character " + super.getName() + " enters the battle!");
 
         // Bucle mientras el ogro está vivo
-        while (super.ogre.isAlive()) {
+        while (ogre.isAlive()) {
 
             int damage = super.getDamage();
 
-            super.ogre.receiveDamage(damage);
-            System.out.println(super.getName() + " attack with " + damage + " points!");
+            ogre.receiveDamage(damage);
+            System.out.println("⚔" + super.getName() + " attack with " + damage + " points!");
 
             // Cooldown del ataque
             try {

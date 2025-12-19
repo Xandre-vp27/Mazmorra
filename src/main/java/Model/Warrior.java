@@ -26,7 +26,7 @@ public class Warrior extends Character implements Runnable {
             int damage = super.getDamage();
 
             super.ogre.receiveDamage(damage);
-            System.out.println(super.getName() + " attack with " + damage + " points!");
+            System.out.println("⚔" + super.getName() + " attack with " + damage + " points!");
 
             // Cooldown del ataque
             try {

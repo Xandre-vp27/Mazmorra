@@ -21,11 +21,11 @@ public class Ogre {
         this.healthMax = health;
     }
 
-    public int getVida() {
+    public int getHealth() {
         return health;
     }
 
-    public String getNom() {
+    public String getName() {
         return name;
     }
 
