@@ -58,7 +58,7 @@ public class MasmorraMultifil_Pt7 {
             ogrePointsHealth = (ogre.getHealth() * 20) / ogreMaxHealth;
 
             for (int i = 0; i < 20; i++) {
-                if (i <= ogrePointsHealth) {
+                if (i < ogrePointsHealth) {
                     ogreGraphHealth[i] = '█';
                 } else {
                     ogreGraphHealth[i] = '░';
@@ -69,16 +69,16 @@ public class MasmorraMultifil_Pt7 {
             
             System.out.println("⏱ " + seconds + "s | " // Segundos de batalla
                     + graphHealth + " " + ogrePercHealth + "% (" + ogre.getHealth() + "/" + ogreMaxHealth // Pintar vida del ogro
-                    + " HP) | 🎭🦸🦸 Heroes alives: " + heroesAlive); //Mostrar héroes vivos
+                    + " HP) | 🎭 Heroes alive: " + heroesAlive); //Mostrar héroes vivos
         }
 
         System.out.println("\n=== 🏁 BATTLE ENDS 🏁 ===");
 
         // Comprobar quien ha ganado la batalla
         if (ogre.getHealth() == 0) {
-            System.out.println("HEROES HAD WON!!");
+            System.out.println("HEROES WIN!!");
         } else {
-            System.out.println("OGRE HAD WON...");
+            System.out.println("OGRE HAVE WON...");
         }
     }   
 
