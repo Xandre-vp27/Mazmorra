@@ -1,69 +1,70 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
 import java.util.Random;
-
 
 public abstract class Character {
 
     private String name;
     private int health;
+    private int maxHealth; // Guardo la vida máxima para saber el tope
 
-    private int attackDamageMax;
-    private int attackDamageMin;
-
-    private int attackVelocityMax;
-    private int attackVelocityMin;
-
-    private int attackTimeMax;
-    private int attackTimeMin;
+    // Stats de ataque
+    private int maxAttackDamage;
+    private int minAttackDamage;
+    private int maxAttackSpeed;
+    private int minAttackSpeed;
     
-    protected Ogre ogre;
+    // Referencia al enemigo (Ogre)
+    protected Ogre ogre; 
 
-    Random rand = new Random();
+    protected Random rand = new Random();
 
-    public Character(String name, int health) {
+    public Character(String name, int health, int maxAttackDamage, int minAttackDamage, int maxAttackSpeed, int minAttackSpeed, Ogre ogre) {
         this.name = name;
         this.health = health;
-    }
-
-    public Character(String name, int health, int attackDamageMax, int attackDamageMin, int attackVelocityMax, int attackVelocityMin, int attackTimeMax, int attackTimeMin, Ogre ogre) {
-        this.name = name;
-        this.health = health;
-        this.attackDamageMax = attackDamageMax;
-        this.attackDamageMin = attackDamageMin;
-        this.attackVelocityMax = attackVelocityMax;
-        this.attackVelocityMin = attackVelocityMin;
-        this.attackTimeMax = attackTimeMax;
-        this.attackTimeMin = attackTimeMin;
+        this.maxHealth = health;
+        this.maxAttackDamage = maxAttackDamage;
+        this.minAttackDamage = minAttackDamage;
+        this.maxAttackSpeed = maxAttackSpeed;
+        this.minAttackSpeed = minAttackSpeed;
         this.ogre = ogre;
     }
 
-    public String getName() {
-        return name;
-    }
+    // Getters y Setters básicos
+    public String getName() { return name; }
+    
+    public int getHealth() { return health; }
+    
+    public boolean isAlive() { return health > 0; }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
+    // Cálculos aleatorios para el ataque
     public int getDamage() {
-        return rand.nextInt(this.attackDamageMax - this.attackDamageMin - 1) + this.attackDamageMin;
+        return rand.nextInt(this.maxAttackDamage - this.minAttackDamage + 1) + this.minAttackDamage;
     }
 
     public int getVelocity() {
-        return rand.nextInt(this.attackVelocityMax - this.attackVelocityMin - 1) + this.attackVelocityMin;
+        return rand.nextInt(this.maxAttackSpeed - this.minAttackSpeed + 1) + this.minAttackSpeed;
     }
 
-    public int getTime() {
-        return rand.nextInt(this.attackTimeMax - this.attackTimeMin - 1) + this.attackTimeMin;
-    }
+    // --- NUEVO MÉTODO: DEFENSA Y ESQUIVA ---
+    // Debe ser synchronized para que dos enemigos no le resten vida al mismo tiempo
+    public synchronized void receiveAttack(int damage) {
+        if (!isAlive()) return; // Si ya está muerto, no le pegues más
 
+        // 1. Lógica de Esquiva (Dodge Mechanics)
+        // Calculamos un número del 0 al 99. Si sale < 20, esquiva (20% probabilidad) 
+        int dodgeChance = rand.nextInt(100); 
+        
+        if (dodgeChance < 20) {
+            // Esquiva exitosa: El daño se anula
+            System.out.println("\t💨 " + this.name + " HAS DODGED the attack! (0 dmg)"); 
+            return; // Salimos del método sin restar vida
+        }
+
+        // 2. Si no esquiva, recibe el daño
+        this.health -= damage;
+        if (this.health < 0) this.health = 0;
+
+        System.out.println("\t🩸 " + this.name + " takes " + damage + " damage! (" + this.health + "/" + this.maxHealth + " HP)");
+    }
 }

@@ -1,34 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
-import java.util.Random;
+public class Rogue extends Character implements Runnable {
 
-/**
- *
- * @author alumnet
- */
-public class Rogue extends Character implements Runnable{
-
-    public Rogue(String name, int health, int attackDamageMax, int attackDamageMin, int attackVelocityMax, int attackVelocityMin, int attackTimeMax, int attackTimeMin, Ogre ogre) {
-        super(name, health, attackDamageMax, attackDamageMin, attackVelocityMax, attackVelocityMin, attackTimeMax, attackTimeMin, ogre);
+    // Eliminados attackTimeMax y attackTimeMin
+    public Rogue(String name, int health, int attackDamageMax, int attackDamageMin, int attackVelocityMax, int attackVelocityMin, Ogre ogre) {
+        super(name, health, attackDamageMax, attackDamageMin, attackVelocityMax, attackVelocityMin, ogre);
     }
     
     @Override
     public void run() {
         System.out.println("🧙🎭 Character " + super.getName() + " enters the battle!");
 
-        // Bucle mientras el ogro está vivo
-        while (super.ogre.isAlive()) {
-
+        while (super.ogre.isAlive() && this.isAlive()) { // Comprobamos también que el Rogue esté vivo
+            
             int damage = super.getDamage();
-
             super.ogre.receiveDamage(damage);
-            System.out.println("⚔" + super.getName() + " attack with " + damage + " points!");
+            System.out.println("⚔ " + super.getName() + " attacks with " + damage + " points!");
 
-            // Cooldown del ataque
             try {
                 Thread.sleep(super.getVelocity());
             } catch (InterruptedException e) {
