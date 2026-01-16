@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Warrior extends Character implements Runnable {
 
     public Warrior(String name, int health, int attackDamageMax, int attackDamageMin, int attackVelocityMax, int attackVelocityMin, Ogre ogre) {
@@ -8,10 +11,15 @@ public class Warrior extends Character implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("⚔ Character " + super.getName() + " enters the battle!");
+        System.out.println("🎭 Character " + super.getName() + " enters the battle!");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Warrior.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         while (super.ogre.isAlive() && this.isAlive()) {
-            
+
             int damage = super.getDamage();
             super.ogre.receiveDamage(damage);
             System.out.println("⚔ " + super.getName() + " attacks with " + damage + " points!");

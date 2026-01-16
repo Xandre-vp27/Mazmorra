@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Wizard extends Character implements Runnable {
 
     public Wizard(String name, int health, int attackDamageMax, int attackDamageMin, int attackVelocityMax, int attackVelocityMin, Ogre ogre) {
@@ -8,7 +11,12 @@ public class Wizard extends Character implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("🧙 Character " + super.getName() + " enters the battle!");
+        System.out.println("🧙🎭 Character " + super.getName() + " enters the battle!");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Wizard.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         while (super.ogre.isAlive() && this.isAlive()) {
             

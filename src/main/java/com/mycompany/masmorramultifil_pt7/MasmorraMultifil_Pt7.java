@@ -4,6 +4,9 @@
 package com.mycompany.masmorramultifil_pt7;
 
 import Model.*;
+import Model.Character;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -11,24 +14,38 @@ import Model.*;
  */
 public class MasmorraMultifil_Pt7 {
 
+    private static List<Character> heroes = new ArrayList();
+    private static int ogreMaxHealth = 1000;
+    private static Ogre ogre = new Ogre("Ogre", ogreMaxHealth, heroes);
+    private static Warrior warrior = new Warrior("Corvan", 100, 140, 30, 1500, 1000, ogre);
+        
+    private static Wizard wizard = new Wizard("Greiflum", 100, 60, 10, 1000, 600, ogre);
+    private static Rogue rogue = new Rogue("Darrel", 100, 30, 5, 500, 200, ogre);
+    
     public static void main(String[] args) throws InterruptedException {
+        
+        heroes.add(warrior);        
+        heroes.add(wizard);        
+        heroes.add(rogue);
 
         System.out.println("=== 🏁 BATTLE STARTS 🏁 ===\n");
-
-        int ogreMaxHealth = 3000;
-        Ogre ogre = new Ogre("Ogre", ogreMaxHealth);
-
-        Warrior warrior = new Warrior("Corvan", 100, 140, 30, 1500, 1000, 500, 300, ogre);
-        Wizard wizard = new Wizard("Greiflum", 100, 60, 10, 1000, 600, 200, 100, ogre);
-        Rogue rogue = new Rogue("Darrel", 100, 30, 5, 500, 200, 50, 10, ogre);
 
         // Creamos el Thread y indicamos el personaje
         Thread filC1 = new Thread(warrior);
         Thread filC2 = new Thread(wizard);
         Thread filC3 = new Thread(rogue);
+        Thread filC4 = new Thread(ogre);
+
+        // --- ASIGNACIÓN DE PRIORIDADES ---
+        filC4.setPriority(Thread.MAX_PRIORITY);
+        filC1.setPriority(Thread.NORM_PRIORITY);
+        filC2.setPriority(Thread.NORM_PRIORITY);
+        filC3.setPriority(Thread.NORM_PRIORITY);
+
         filC1.start();
         filC2.start();
         filC3.start();
+        filC4.start();
 
         int seconds = 0;
         char[] ogreGraphHealth = new char[20];
@@ -64,9 +81,9 @@ public class MasmorraMultifil_Pt7 {
                     ogreGraphHealth[i] = '░';
                 }
             }
-            
+
             String graphHealth = new String(ogreGraphHealth);
-            
+
             System.out.println("⏱ " + seconds + "s | " // Segundos de batalla
                     + graphHealth + " " + ogrePercHealth + "% (" + ogre.getHealth() + "/" + ogreMaxHealth // Pintar vida del ogro
                     + " HP) | 🎭 Heroes alive: " + heroesAlive); //Mostrar héroes vivos
@@ -78,8 +95,12 @@ public class MasmorraMultifil_Pt7 {
         if (ogre.getHealth() == 0) {
             System.out.println("HEROES WIN!!");
         } else {
-            System.out.println("OGRE HAVE WON...");
+            System.out.println("OGRE HAS WON...");
         }
-    }   
+    }
+    
+    public void initializeThreads() {
+        
+    }
 
 }
