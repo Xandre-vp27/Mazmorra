@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Rogue extends Character implements Runnable {
 
@@ -10,15 +8,17 @@ public class Rogue extends Character implements Runnable {
         super(name, health, attackDamageMax, attackDamageMin, attackVelocityMax, attackVelocityMin, ogre);
     }
 
+    // Runnable
     @Override
     public void run() {
         System.out.println("🧙🎭 Character " + super.getName() + " enters the battle!");
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(Rogue.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: " + ex);
         }
 
+        // Atacar y recibir daño
         while (super.ogre.isAlive() && this.isAlive()) { // Comprobamos también que el Rogue esté vivo
 
             int damage = super.getDamage();

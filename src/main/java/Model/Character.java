@@ -46,22 +46,20 @@ public abstract class Character {
         return rand.nextInt(this.maxAttackSpeed - this.minAttackSpeed + 1) + this.minAttackSpeed;
     }
 
-    // --- NUEVO MÉTODO: DEFENSA Y ESQUIVA ---
-    // Debe ser synchronized para que dos enemigos no le resten vida al mismo tiempo
+    // --- DEFENSA Y ESQUIVA ---
+    // Debe ser synchronized para que a dos enemigos no le resten vida al mismo tiempo
     public synchronized void receiveAttack(int damage) {
-        if (!isAlive()) return; // Si ya está muerto, no le pegues más
+        if (!isAlive()) return; 
 
-        // 1. Lógica de Esquiva (Dodge Mechanics)
-        // Calculamos un número del 0 al 99. Si sale < 20, esquiva (20% probabilidad) 
+        // Calculo para esquivar del 20%
         int dodgeChance = rand.nextInt(100); 
         
         if (dodgeChance < 20) {
-            // Esquiva exitosa: El daño se anula
             System.out.println("\t💨 " + this.name + " HAS DODGED the attack! (0 dmg)"); 
-            return; // Salimos del método sin restar vida
+            return; // Ha esquivado el golpe y salimos del método
         }
 
-        // 2. Si no esquiva, recibe el daño
+        // Si no esquiva, recibe el daño
         this.health -= damage;
         if (this.health < 0) this.health = 0;
 

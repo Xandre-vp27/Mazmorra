@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Ogre implements Runnable { // Ahora es un HILO (Runnable)
+public class Ogre implements Runnable { 
 
     private String name;
     private int health;
@@ -16,7 +16,6 @@ public class Ogre implements Runnable { // Ahora es un HILO (Runnable)
     private List<Character> enemies;
     private Random rand = new Random();
 
-    // Constructor actualizado: Ahora pide la lista de enemigos
     public Ogre(String name, int health, List<Character> enemies) {
         this.name = name;
         this.health = health;
@@ -48,32 +47,31 @@ public class Ogre implements Runnable { // Ahora es un HILO (Runnable)
         }
 
         while (this.isAlive()) {
-            // 1. Elegir una víctima al azar
-            // Comprobamos si queda alguien vivo antes de atacar
+           
+            // Comprobar si quedan héroes vivos
             if (allHeroesDead()) {
                 System.out.println("👹 Ogre: 'HAHAHA! ALL DEAD!'");
                 break; // Salimos del bucle si ganamos
             }
 
-            // Elegimos un índice aleatorio de la lista
+            // Elige un héroe aleatorio de la lista
             int targetIndex = rand.nextInt(enemies.size());
             Character victim = enemies.get(targetIndex);
 
-            // 2. ATACAR (Si la víctima está viva)
+            // ATAQUE
             if (victim.isAlive()) {
                 System.out.println("👹 THE OGRE ATTACKS " + victim.getName() + "!");
 
-                // Daño base del Ogro (según PDF 20-40)
+                // Cálculo de daño del Ogro 
                 int damage = rand.nextInt(21) + 20;
 
-                // Llamamos al método synchronized de defensa del héroe
+                // Llama al método synchronized de defensa del héroe
                 victim.receiveAttack(damage);
             }
 
-            // 3. DESCANSO (Cooldown)
+            // COOLDOWN de ataque
             try {
-                // El Ogro es rápido (400-800ms)
-                Thread.sleep(rand.nextInt(401) + 400);
+                Thread.sleep(rand.nextInt(401) + 400); // (400-800ms)
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,6 +94,7 @@ public class Ogre implements Runnable { // Ahora es un HILO (Runnable)
             return;
         }
 
+        // Cuando está en modo furia recibe la mitad del daño
         if (inFury) {
             points = points / 2;
             System.out.println("\t🛡️ " + name + " resists the attack (Fury)!");
@@ -103,9 +102,10 @@ public class Ogre implements Runnable { // Ahora es un HILO (Runnable)
 
         this.health -= points;
         if (this.health < 0) {
-            this.health = 0;
+            this.health = 0; // Control de errores para que no acabe la partida con vida negativa
         }
 
+        // Set modo furia
         if (this.health < 750 && !inFury) {
             inFury = true;
             System.out.println("\t😡😡😡 GRRAAAAH!! " + name + " ENTERED BERSERKER RAGE! 😡😡😡");
