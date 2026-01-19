@@ -26,7 +26,10 @@ public class MasmorraMultifil_Pt7 {
     static Thread tRogue;
     
     // Constantes de configuración
-    static final int OGRE_MAX_HEALTH = 4000; // Subido a 4000 para equilibrar
+    static final int OGRE_MAX_HEALTH = 2500;
+    static final int WARRIOR_MAX_HEALTH = 200;
+    static final int WIZARD_MAX_HEALTH = 200;
+    static final int ROGUE_MAX_HEALTH = 200; 
 
     public static void main(String[] args) {
         System.out.println("=== 🏁 BATTLE STARTS ===\n");
@@ -47,9 +50,9 @@ public class MasmorraMultifil_Pt7 {
 
         ogre = new Ogre("Grom The Ogre", OGRE_MAX_HEALTH, heroesList);
 
-        warrior = new Warrior("Corvan", 100, 140, 30, 1500, 1000, ogre);
-        wizard = new Wizard("Greiflum", 100, 60, 10, 1000, 600, ogre);
-        rogue = new Rogue("Darrel", 100, 30, 5, 500, 200, ogre);
+        warrior = new Warrior("Corvan", WARRIOR_MAX_HEALTH, 140, 30, 1500, 1000, ogre);
+        wizard = new Wizard("Greiflum", WIZARD_MAX_HEALTH, 60, 10, 1000, 600, ogre);
+        rogue = new Rogue("Darrel", ROGUE_MAX_HEALTH, 30, 5, 500, 200, ogre);
 
         heroesList.add(warrior);
         heroesList.add(wizard);

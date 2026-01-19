@@ -9,7 +9,6 @@ public class Ogre implements Runnable {
 
     private String name;
     private int health;
-    private int maxHealth;
     private boolean inFury = false;
 
     // Lista de enemigos para poder atacarles
@@ -19,7 +18,6 @@ public class Ogre implements Runnable {
     public Ogre(String name, int health, List<Character> enemies) {
         this.name = name;
         this.health = health;
-        this.maxHealth = health;
         this.enemies = enemies;
     }
 
