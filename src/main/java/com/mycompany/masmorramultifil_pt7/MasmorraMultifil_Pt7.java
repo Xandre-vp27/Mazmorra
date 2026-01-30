@@ -19,17 +19,19 @@ public class MasmorraMultifil_Pt7 {
     static Warrior warrior;
     static Wizard wizard;
     static Rogue rogue;
-    
+    static Healer healer;
+
     static Thread tOgre;
     static Thread tWarrior;
     static Thread tWizard;
     static Thread tRogue;
-    
+    static Thread tHealer;
+
     // Constantes de configuración
     static final int OGRE_MAX_HEALTH = 2500;
     static final int WARRIOR_MAX_HEALTH = 200;
     static final int WIZARD_MAX_HEALTH = 200;
-    static final int ROGUE_MAX_HEALTH = 200; 
+    static final int ROGUE_MAX_HEALTH = 200;
 
     public static void main(String[] args) {
         System.out.println("=== 🏁 BATTLE STARTS ===\n");
@@ -54,34 +56,40 @@ public class MasmorraMultifil_Pt7 {
         wizard = new Wizard("Greiflum", WIZARD_MAX_HEALTH, 60, 10, 1000, 600, ogre);
         rogue = new Rogue("Darrel", ROGUE_MAX_HEALTH, 30, 5, 500, 200, ogre);
 
+        healer = new Healer("Eylin", heroesList);
+        
         heroesList.add(warrior);
         heroesList.add(wizard);
         heroesList.add(rogue);
-        
+
         System.out.println("✅ Game entities initialized.");
     }
 
     /**
-     * Convierte los personajes Runnables en Threads, asigna Prioridades y los inicia.
+     * Convierte los personajes Runnables en Threads, asigna Prioridades y los
+     * inicia.
      */
     private static void startThreads() {
         tOgre = new Thread(ogre);
         tWarrior = new Thread(warrior);
         tWizard = new Thread(wizard);
         tRogue = new Thread(rogue);
+        tHealer = new Thread(healer);
 
         // --- ASIGNACIÓN DE PRIORIDADES  ---
         tOgre.setPriority(Thread.MAX_PRIORITY);
         tWarrior.setPriority(Thread.NORM_PRIORITY);
         tWizard.setPriority(Thread.NORM_PRIORITY);
         tRogue.setPriority(Thread.NORM_PRIORITY);
+        tHealer.setPriority(Thread.NORM_PRIORITY);
 
         // Arrancar todos
         tOgre.start();
         tWarrior.start();
         tWizard.start();
         tRogue.start();
-        
+        tHealer.start();
+
         System.out.println("✅ Threads started.\n");
     }
 
@@ -93,10 +101,10 @@ public class MasmorraMultifil_Pt7 {
         try {
             // El bucle se mantiene mientras el Ogro viva y quede al menos un héroe vivo
             while (ogre.isAlive() && (tWarrior.isAlive() || tWizard.isAlive() || tRogue.isAlive())) {
-                
+
                 Thread.sleep(1000); // Pausa de 1s para no saturar consola 
                 seconds++;
-                
+
                 printStatus(seconds);
             }
         } catch (InterruptedException e) {
@@ -107,14 +115,21 @@ public class MasmorraMultifil_Pt7 {
     }
 
     /**
-     * Imprime una línea de estado con la barra de vida y contador de héroes vivos.
+     * Imprime una línea de estado con la barra de vida y contador de héroes
+     * vivos.
      */
     private static void printStatus(int seconds) {
         // Contador héroes vivos
         int heroesAlive = 0;
-        if (tWarrior.isAlive()) heroesAlive++;
-        if (tWizard.isAlive()) heroesAlive++;
-        if (tRogue.isAlive()) heroesAlive++;
+        if (tWarrior.isAlive()) {
+            heroesAlive++;
+        }
+        if (tWizard.isAlive()) {
+            heroesAlive++;
+        }
+        if (tRogue.isAlive()) {
+            heroesAlive++;
+        }
 
         // Calcula porcentajes para la barra de vida
         float ogreCurrentHealth = (float) ogre.getHealth();
@@ -133,8 +148,8 @@ public class MasmorraMultifil_Pt7 {
         }
 
         // Imprime línea formateada
-        System.out.println("\n⏱ " + seconds + "s | " 
-                + graphHealth + " " + String.format("%.1f", ogrePercHealth) + "% (" 
+        System.out.println("\n⏱ " + seconds + "s | "
+                + graphHealth + " " + String.format("%.1f", ogrePercHealth) + "% ("
                 + ogre.getHealth() + "/" + OGRE_MAX_HEALTH + " HP) | 🎭 Heroes active: " + heroesAlive + "\n");
     }
 
@@ -143,12 +158,12 @@ public class MasmorraMultifil_Pt7 {
      */
     private static void printFinalResult() {
         System.out.println("\n=== 🏁 BATTLE ENDS 🏁 ===");
-        
+
         if (!ogre.isAlive()) {
-             System.out.println("🏆 HEROES HAVE WON! The beast is slain.");
+            System.out.println("🏆 HEROES HAVE WON! The beast is slain.");
         } else {
-             System.out.println("💀 OGRE WINS! The party has been wiped out.");
-             System.out.println("Ogre remaining HP: " + ogre.getHealth());
+            System.out.println("💀 OGRE WINS! The party has been wiped out.");
+            System.out.println("Ogre remaining HP: " + ogre.getHealth());
         }
     }
 }

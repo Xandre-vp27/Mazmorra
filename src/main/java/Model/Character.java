@@ -17,6 +17,9 @@ public abstract class Character {
     // Referencia al enemigo (Ogre)
     protected Ogre ogre; 
 
+    // Flag para saber si la muerte es definitiva (La sanadora ha muerto)
+    protected boolean permaDeath = false;
+    
     protected Random rand = new Random();
 
     public Character(String name, int health, int maxAttackDamage, int minAttackDamage, int maxAttackSpeed, int minAttackSpeed, Ogre ogre) {
@@ -49,11 +52,10 @@ public abstract class Character {
     // --- DEFENSA Y ESQUIVA ---
     // Debe ser synchronized para que a dos enemigos no le resten vida al mismo tiempo
     public synchronized void receiveAttack(int damage) {
-        if (!isAlive()) return; 
+        if (permaDeath || health <= 0) return;
 
         // Calculo para esquivar del 20%
         int dodgeChance = rand.nextInt(100); 
-        
         if (dodgeChance < 20) {
             System.out.println("\t💨 " + this.name + " HAS DODGED the attack! (0 dmg)"); 
             return; // Ha esquivado el golpe y salimos del método
@@ -64,5 +66,44 @@ public abstract class Character {
         if (this.health < 0) this.health = 0;
 
         System.out.println("\t🩸 " + this.name + " takes " + damage + " damage! (" + this.health + "/" + this.maxHealth + " HP)");
+    }
+    
+    // --- HÉROE KO ---
+    // Si su vida es <10, se detendrá aquí esperando a la Sanadora.
+    public synchronized void checkHealthStatus() {
+        // Mientras esté en estado KO (<10), vivo (>0) y Eylin siga viva (!permaDeath)
+        while (this.health < 10 && this.health > 0 && !permaDeath) {
+            try {
+                System.out.println("🚑 " + this.name + " IS KO! Waiting for the healer... (Health: " + this.health + ")");
+                
+                // El hilo se bloquea y libera el monitor
+                this.wait(); 
+                
+                System.out.println("✨ " + this.name + " wakes up!"); // Mensaje que aparece luego de recibir el notify()
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    
+    // Método para la Sanadora: Cura y Despierta.
+    public synchronized void restoreHealth(int amount) {
+        // Solo curamos si está herido pero no muerto definitivamente
+        if (this.health > 0 && !permaDeath) {
+            this.health += amount;
+            if (this.health > this.maxHealth) this.health = this.maxHealth;
+            
+            System.out.println("💖The healer heals " + this.name + "! (+ " + amount + " HP). New HP: " + this.health);
+            
+            // Despertamos al hilo que estaba en wait()
+            this.notify(); 
+        }
+    }
+    
+    // Método de emergencia: Si la sanadora muere, despierta a todos SIN curar.
+    public synchronized void forceWakeUp() {
+        this.permaDeath = true; // Marcamos que ya no hay posibilidad de recuperarse
+        this.notifyAll(); // Despierta a todos los hilos atrapados en wait
     }
 }

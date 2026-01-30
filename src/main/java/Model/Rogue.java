@@ -19,9 +19,14 @@ public class Rogue extends Character implements Runnable {
         }
 
         // Atacar y recibir daño
-        while (super.ogre.isAlive() && this.isAlive()) { // Comprobamos también que el Rogue esté vivo
+        while (super.ogre.isAlive() && this.isAlive()) { 
 
+            super.checkHealthStatus(); // Si tiene <10 de vida, no puede atacar, está 'KO'
+            if (!this.isAlive()) break; // Comprobación de si una vez se 'despierta' sigue vivo o el Ogro lo ha rematado
+            
             int damage = super.getDamage();
+            
+            // Ataque al Ogro
             super.ogre.receiveDamage(damage);
             System.out.println("⚔ " + super.getName() + " attacks with " + damage + " points!");
 
