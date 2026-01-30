@@ -66,6 +66,13 @@ public abstract class Character {
         if (this.health < 0) this.health = 0;
 
         System.out.println("\t🩸 " + this.name + " takes " + damage + " damage! (" + this.health + "/" + this.maxHealth + " HP)");
+        
+        // Si el golpe ha sido mortal (0 HP), despertamos al hilo por si estaba en wait()
+        if (this.health == 0) {
+            System.out.println("💀 " + this.name + " dies from the injuries!");
+            this.permaDeath = true; // Confirmamos muerte definitiva
+            this.notifyAll();
+        }
     }
     
     // --- HÉROE KO ---
