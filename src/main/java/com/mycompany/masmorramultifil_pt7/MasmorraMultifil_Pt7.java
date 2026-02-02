@@ -27,11 +27,12 @@ public class MasmorraMultifil_Pt7 {
     static Thread tRogue;
     static Thread tHealer;
 
-    // Constantes de configuración
-    static final int OGRE_MAX_HEALTH = 2500;
+    // CONSTANTES DE CONFIGURACIÓN
+    static final int OGRE_MAX_HEALTH = 3500;
     static final int WARRIOR_MAX_HEALTH = 200;
     static final int WIZARD_MAX_HEALTH = 200;
     static final int ROGUE_MAX_HEALTH = 200;
+    static final int HEALER_HEALTH = 150;
 
     public static void main(String[] args) {
         System.out.println("=== 🏁 BATTLE STARTS ===\n");
@@ -49,6 +50,8 @@ public class MasmorraMultifil_Pt7 {
     private static void initCharacters() {
         // Lista compartida de enemigos para el Ogro
         List<Character> heroesList = new ArrayList<>();
+        // Lista para la sanadora
+        List<Character> heroesToHeal = new ArrayList<>();
 
         ogre = new Ogre("Grom The Ogre", OGRE_MAX_HEALTH, heroesList);
 
@@ -56,18 +59,20 @@ public class MasmorraMultifil_Pt7 {
         wizard = new Wizard("Greiflum", WIZARD_MAX_HEALTH, 60, 10, 1000, 600, ogre);
         rogue = new Rogue("Darrel", ROGUE_MAX_HEALTH, 30, 5, 500, 200, ogre);
 
-        healer = new Healer("Eylin", heroesList);
-        
-        heroesList.add(warrior);
-        heroesList.add(wizard);
-        heroesList.add(rogue);
+        healer = new Healer("Eylin", HEALER_HEALTH, heroesToHeal, ogre);
+
+        heroesToHeal.add(warrior);
+        heroesToHeal.add(wizard);
+        heroesToHeal.add(rogue);
+
+        heroesList.addAll(heroesToHeal);        
+        heroesList.add(healer); 
 
         System.out.println("✅ Game entities initialized.");
     }
 
     /**
-     * Convierte los personajes Runnables en Threads, asigna Prioridades y los
-     * inicia.
+     * Convierte los personajes Runnables en Threads, asigna Prioridades y los inicia.
      */
     private static void startThreads() {
         tOgre = new Thread(ogre);
@@ -115,8 +120,7 @@ public class MasmorraMultifil_Pt7 {
     }
 
     /**
-     * Imprime una línea de estado con la barra de vida y contador de héroes
-     * vivos.
+     * Imprime una línea de estado con la barra de vida y contador de héroes vivos.
      */
     private static void printStatus(int seconds) {
         // Contador héroes vivos
@@ -128,6 +132,9 @@ public class MasmorraMultifil_Pt7 {
             heroesAlive++;
         }
         if (tRogue.isAlive()) {
+            heroesAlive++;
+        }
+        if (tHealer.isAlive()) {
             heroesAlive++;
         }
 

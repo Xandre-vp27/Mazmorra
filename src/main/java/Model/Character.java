@@ -6,9 +6,9 @@ public abstract class Character {
 
     private String name;
     private int health;
-    private int maxHealth; // Guardo la vida máxima para saber el tope
+    private int maxHealth; // Guardo la vida máxima para saber el máximo al curar
 
-    // Stats de ataque
+    // STATS de ataque
     private int maxAttackDamage;
     private int minAttackDamage;
     private int maxAttackSpeed;
@@ -93,8 +93,7 @@ public abstract class Character {
         }
     }
     
-    
-    // Método para la Sanadora: Cura y Despierta.
+    // Método para la Sanadora: CURA y Despierta.
     public synchronized void restoreHealth(int amount) {
         // Solo curamos si está herido pero no muerto definitivamente
         if (this.health > 0 && !permaDeath) {

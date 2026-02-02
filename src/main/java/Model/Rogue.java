@@ -1,9 +1,7 @@
 package Model;
 
-
 public class Rogue extends Character implements Runnable {
 
-    // Eliminados attackTimeMax y attackTimeMin
     public Rogue(String name, int health, int attackDamageMax, int attackDamageMin, int attackVelocityMax, int attackVelocityMin, Ogre ogre) {
         super(name, health, attackDamageMax, attackDamageMin, attackVelocityMax, attackVelocityMin, ogre);
     }

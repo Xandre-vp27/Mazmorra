@@ -1,29 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
 import java.util.List;
 
-public class Healer implements Runnable {
+public class Healer extends Character implements Runnable {
 
     private String name;
     private int mana;
     private int maxMana = 80;
     private List<Character> heroesToHeal; // Lista de personajes curables
 
-    public Healer(String name, List<Character> heroesToHeal) {
-        this.name = name;
+    public Healer(String name, int health, List<Character> heroesToHeal, Ogre ogre) {
+        super(name, health, 0, 0, 0, 0, ogre); // Llamada al constructor de Character
         this.heroesToHeal = heroesToHeal;
-        this.mana = maxMana; // Empieza con el maná a tope
+        this.mana = maxMana; // Empieza con el maná al máximo
     }
 
     @Override
     public void run() {
         System.out.println("✨ Healer " + this.name + " enters the battlefield!");
 
-        while (true) {
+        while (this.isAlive()) {
             try {
                 // REGENERACIÓN DE MANÁ (Cada 0.5s) 
                 Thread.sleep(500); 
@@ -39,7 +35,7 @@ public class Healer implements Runnable {
                         
                         // Comprovación de que tenga >50 maná para curar
                         if (this.mana >= 50) {
-                            System.out.println("✨ " + this.name + " found " + hero.getName() + " unconscious! Casting HEAL...");
+                            System.out.println("✨ " + super.getName() + " found " + hero.getName() + " unconscious! Casting HEAL...");
                             
                             this.mana -= 50;
                             
@@ -57,5 +53,15 @@ public class Healer implements Runnable {
                 break; 
             }
         }
-    }
+
+        // --- EN CASO QUE MUERE ---
+        // Si sale del bucle porque ha muerto, debe despertar a todos para evitar hilos eternos (wait())
+        if (!this.isAlive()) {
+            System.out.println("💀 " + super.getName() + " IS DYING... Her last breath wakes the fallen.");
+            for (Character hero : heroesToHeal) {
+                hero.forceWakeUp(); // Despierta a todos sin curar 
+            }
+        }
+    }  
+
 }
